@@ -7,7 +7,7 @@
 void main()
 {
    int gd = DETECT, gm;
-   int x1, y1, x2, y2,step,xn,yn,dx,dy;
+   int x1,y1,x2,y2,step,xn,yn,dx,dy;
    clrscr();
    initgraph(&gd, &gm, "C:/TURBOC3/BGI");
    printf("enter the starting coortdinates");
@@ -30,5 +30,5 @@ void main()
    		y1=y1+yn;
    }
    getch();
-   closegrph();
+   closegraph();
 }
