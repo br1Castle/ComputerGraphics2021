@@ -17,7 +17,7 @@ void threeDtotwoD()
 	double cZ;
 	char c;
 	Raster = createRaster();
-	FILE *raw = fopen("Monkey.raw","r");
+	/*FILE *raw = fopen("Monkey.raw","r");
 	while ((c = fgetc(raw)) != EOF)
     	if (c == '\n')
     		n+=3;
@@ -34,7 +34,7 @@ void threeDtotwoD()
 	}
 	cX = sumX / n ;
 	cY = sumY / n ;
-	cZ = sumZ / n ;
+	cZ = sumZ / n ;*/
 	/*
 	for( int i = 0 ; i < n ; i++ )
 	{
@@ -45,7 +45,7 @@ void threeDtotwoD()
 	}
 	printf("\nThe center of the object is: (%lf,%lf,%lf)",cX,cY,cZ);
 	*/
-	fclose( raw );
+	/*fclose( raw );
 	translateAndProyect( n, Points, cX, cY, cZ );
 	transform3D(n,Points);
 	scaleAndTranslate( n, Points, cX, cY, cZ  );
@@ -53,7 +53,7 @@ void threeDtotwoD()
 	free( Points );
 	Points = NULL;
 	free(Raster);
-	Raster = NULL;
+	Raster = NULL;*/
 }
 
 void translateAndProyect( int n, struct point *Points, double cX, double cY, double cZ )
@@ -157,8 +157,7 @@ unsigned char *** createRaster()
 
 void mainBresenham( int n, struct point *Points, unsigned char *** Raster )
 {
-	//for(int i=0;i<n;i++)
-    //printf("In bresenham point in the 3D form(%lf,%lf,%lf)\n",Points[i].x,Points[i].y,Points[i].z);
+
 	int i;
 	unsigned char rgb[3]={0,0,255};
 	for( i = 0 ; i < n-3 ; i+=3 )
