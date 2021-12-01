@@ -2,6 +2,9 @@
 #include<stdlib.h>
 #include<time.h>
 #include<math.h>
+#include"bresenham.h"
+#include"vertex.h"
+#include"drawing.h"
 
 int j = 0;			
 int m = 0;			
