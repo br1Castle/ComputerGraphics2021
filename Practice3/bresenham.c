@@ -15,9 +15,15 @@ int evaluatedSlope;
   rotations using the center of the object.
 */
 void
-translation ()
+translation (int n, struct vertex *vertexes, double cX, double cY, double cZ)
 {
-
+  double matrix[4][4] = {
+    {1, 0, 0, -cX},
+    {0, 1, 0, -cY},
+    {0, 0, 1, -cZ},
+    {0, 0, 0, 1}
+  };
+  applyMatrix (vertexes, n, matrix);
 }
 
 /*
@@ -25,36 +31,63 @@ translation ()
   distance.
 */
 void
-translateAndProyect ()
+translateAndProyect (int n, struct vertex *vertexes, double cX, double cY,
+		     double cZ)
 {
-  
+  double matrix[4][4] = { {1, 0, 0, -cX},
+  {0, 1, 0, -cY},
+  {0, 0, 1, (3 * f) - cZ},
+  {0, 0, 1 / f, (((3 * f) - cZ)) / f}
+  };
+  applyMatrix (vertexes, n, matrix);
 }
 
 /*
   This function performs a 3D rotation over the X axis
 */
 void
-rotationX ()
+rotationX (struct vertex *vertexes, int n, double alfa)
 {
-
+  double cx = cos (alfa * M_PI);
+  double sx = sin (alfa * M_PI);
+  double matrix[4][4] = { {1, 0, 0, 0},
+  {0, cx, -sx, 0},
+  {0, sx, cx, 0},
+  {0, 0, 0, 1}
+  };
+  applyMatrix (vertexes, n, matrix);
 }
 
 /*
   This function performs a 3D rotation over the Y axis
 */
 void
-rotationY ()
+rotationY (struct vertex *vertexes, int n, double beta)
 {
-  
+  double cy = cos (beta * M_PI);
+  double sy = sin (beta * M_PI);
+  double matrix[4][4] = { {cy, 0, sy, 0},
+  {0, 1, 0, 0},
+  {-sy, 0, cy, 0},
+  {0, 0, 0, 1}
+  };
+  applyMatrix (vertexes, n, matrix); 
 }
 
 /*
   This function performs a 3D rotation over the Z axis
 */
 void
-rotationZ ()
+rotationZ (struct vertex *vertexes, int n, double gamma)
 {
-  
+  double cz = cos (gamma * M_PI);
+  double sz = sin (gamma * M_PI);
+  double matrix[4][4] = { {cz, -sz, 0, 0},
+  {sz, cz, 0, 0},
+  {0, 0, 1, 0},
+  {0, 0, 0, 1}
+  };
+  applyMatrix (vertexes, n, matrix);
 }
 
 /*
@@ -62,9 +95,15 @@ rotationZ ()
   moved to a convenient position to perform rotations.
 */
 void
-returnTranslation ()
+returnTranslation (struct vertex *vertexes, double cX, double cY, double cZ,
+		   int n)
 {
- 
+  double matrix[4][4] = { {1, 0, 0, cX},
+  {0, 1, 0, cY},
+  {0, 0, 1, cZ},
+  {0, 0, 0, 1}
+  };
+  applyMatrixRT (vertexes, n, matrix);
 }
 
 /*
@@ -72,9 +111,57 @@ returnTranslation ()
   applying the matrix.
 */
 void
-applyMatrixRT ()
+applyMatrixRT (struct vertex *vertexes, int n, double matrix[4][4])
 {
-
+  int i = 0;
+  int j = 0;
+  int op = 1;
+  struct vertex aux;
+  for (i = 0; i < n; i++)
+    {
+      aux.num = vertexes[i].num;
+      aux.x = 0.0;
+      aux.y = 0.0;
+      aux.z = 0.0;
+      aux.w = 0.0;
+      aux.zb = vertexes[i].zb;
+      aux.hash = vertexes[i].hash;
+      for (j = 0; j < 4; j++)
+	{
+	  switch (op)
+	    {
+	    case 1:
+	      aux.x += (matrix[j][0] * vertexes[i].x);
+	      aux.x += (matrix[j][1] * vertexes[i].y);
+	      aux.x += (matrix[j][2] * vertexes[i].z);
+	      aux.x += (matrix[j][3] * vertexes[i].w);
+	      op = 2;
+	      break;
+	    case 2:
+	      aux.y += (matrix[j][0] * vertexes[i].x);
+	      aux.y += (matrix[j][1] * vertexes[i].y);
+	      aux.y += (matrix[j][2] * vertexes[i].z);
+	      aux.y += (matrix[j][3] * vertexes[i].w);
+	      op = 3;
+	      break;
+	    case 3:
+	      aux.z += (matrix[j][0] * vertexes[i].x);
+	      aux.z += (matrix[j][1] * vertexes[i].y);
+	      aux.z += (matrix[j][2] * vertexes[i].z);
+	      aux.z += (matrix[j][3] * vertexes[i].w);
+	      op = 4;
+	      break;
+	    case 4:
+	      aux.w += (matrix[j][0] * vertexes[i].x);
+	      aux.w += (matrix[j][1] * vertexes[i].y);
+	      aux.w += (matrix[j][2] * vertexes[i].z);
+	      aux.w += (matrix[j][3] * vertexes[i].w);
+	      op = 1;
+	      break;
+	    }
+	}
+      vertexes[i] = aux;
+    }
 }
 
 /*
@@ -82,19 +169,76 @@ applyMatrixRT ()
   (to manipulate the 3D model).
 */
 void
-applyMatrix ()
+applyMatrix (struct vertex *vertexes, int n, double matrix[4][4])
 {
- 
+  int i = 0;
+  int j = 0;
+  int op = 1;
+  struct vertex aux;
+  for (i = 0; i < n; i++)
+    {
+      aux.num = vertexes[i].num;
+      aux.x = 0.0;
+      aux.y = 0.0;
+      aux.z = 0.0;
+      aux.w = 0.0;
+      aux.zb = 0.0;
+      aux.hash = vertexes[i].hash;
+      for (j = 0; j < 4; j++)
+	{
+	  switch (op)
+	    {
+	    case 1:
+	      aux.x += (matrix[j][0] * vertexes[i].x);
+	      aux.x += (matrix[j][1] * vertexes[i].y);
+	      aux.x += (matrix[j][2] * vertexes[i].z);
+	      aux.x += (matrix[j][3] * vertexes[i].w);
+	      op = 2;
+	      break;
+	    case 2:
+	      aux.y += (matrix[j][0] * vertexes[i].x);
+	      aux.y += (matrix[j][1] * vertexes[i].y);
+	      aux.y += (matrix[j][2] * vertexes[i].z);
+	      aux.y += (matrix[j][3] * vertexes[i].w);
+	      op = 3;
+	      break;
+	    case 3:
+	      aux.z += (matrix[j][0] * vertexes[i].x);
+	      aux.z += (matrix[j][1] * vertexes[i].y);
+	      aux.z += (matrix[j][2] * vertexes[i].z);
+	      aux.z += (matrix[j][3] * vertexes[i].w);
+	      aux.zb += (matrix[j][0] * vertexes[i].x);
+	      aux.zb += (matrix[j][1] * vertexes[i].y);
+	      aux.zb += (matrix[j][2] * vertexes[i].z);
+	      aux.zb += (matrix[j][3] * vertexes[i].w);
+	      op = 4;
+	      break;
+	    case 4:
+	      aux.w += (matrix[j][0] * vertexes[i].x);
+	      aux.w += (matrix[j][1] * vertexes[i].y);
+	      aux.w += (matrix[j][2] * vertexes[i].z);
+	      aux.w += (matrix[j][3] * vertexes[i].w);
+	      op = 1;
+	      break;
+	    }
+	}
+      vertexes[i] = aux;
+    }
 }
 
 /*
   This function transform the 3D vertexes into 2D
 */
 void
-transform3D ()
+transform3D (int n, struct vertex *vertexes)
 {
-  
-
+  int i = 0;
+  for (i = 0; i < n; i++)
+    {
+      vertexes[i].x /= vertexes[i].w;
+      vertexes[i].y /= vertexes[i].w;
+      vertexes[i].z /= vertexes[i].w;
+    }
 }
 
 /*
@@ -102,9 +246,18 @@ transform3D ()
   received parameters
 */
 void
-scaleAndTranslate ()
+scaleAndTranslate (int n, struct vertex *vertexes, double cX, double cY,
+		   double cZ, double sfX, double sfY, double tX, double tY)
 {
-  
+  tX += cX;
+  tY += cY;
+  for (int i = 0; i < n; i++)
+    {
+      vertexes[i].x *= sfX;
+      vertexes[i].y *= sfY;
+      vertexes[i].x += tX;
+      vertexes[i].y += tY;
+    }
 }
 
 /*
@@ -114,34 +267,76 @@ scaleAndTranslate ()
 struct pixels ***
 createRaster ()
 {
-  
+  struct pixels ***Raster;
+  Raster = (struct pixels ***) malloc (1920 * sizeof (struct pixels **));
+  for (int i = 0; i < 1920; i++)
+    {
+      Raster[i] = (struct pixels **) malloc (1080 * sizeof (struct pixels *));
+      for (int j = 0; j < 1080; j++)
+	{
+	  Raster[i][j] =
+	    (struct pixels *) malloc (3 * sizeof (struct pixels));
+	  Raster[i][j]->rgb[0] = 0;
+	  Raster[i][j]->rgb[1] = 0;
+	  Raster[i][j]->rgb[2] = 0;
+	  Raster[i][j]->zBuffer = -10000;
+	}
+    }
+  return Raster;
 }
 
 /*
   This function cleans the Raster if something was drawn on it.
 */
 void
-cleanRaster ()
+cleanRaster (struct pixels ****Raster)
 {
-  
+  for (int i = 0; i < 1920; i++)
+    {
+      for (int j = 0; j < 1080; j++)
+	{
+	  (*Raster)[i][j]->rgb[0] = 0;
+	  (*Raster)[i][j]->rgb[1] = 0;
+	  (*Raster)[i][j]->rgb[2] = 0;
+	  (*Raster)[i][j]->zBuffer = -10000;
+	}
+    }  
 }
 
 /*
   This function clean the ZBuffer matrix
 */
 void
-cleanZBuffer ()
+cleanZBuffer (double ***ZBuffer)
 {
-  
+  for (int i = 0; i < 1920; i++)
+    {
+      for (int j = 0; j < 1080; j++)
+	{
+	  (*ZBuffer)[i][j] = -10000;
+	  (*ZBuffer)[i][j] = -10000;
+	}
+    }
 }
 
 /*
   This function calculates the normal of a face.
 */
 struct vertex
-getFaceNormal ()
+getFaceNormal (struct face f, struct vertex *vertexes, struct edge *edges)
 {
-  
+  struct vertex A;
+  struct vertex B;
+  struct vertex C;
+  struct vertex normal;
+  A = vertexes[edges[f.edge1->num].vertex1->num];	// Define the 3 vectors
+  B = vertexes[edges[f.edge2->num].vertex1->num];
+  C = vertexes[edges[f.edge3->num].vertex1->num];
+  /* Calculate the normal vector */
+  normal.x = (((B.y - A.y) * (C.z - B.z)) - ((B.z - A.z) * (C.y - B.y)));
+  normal.y = (((B.x - A.x) * (C.z - B.z)) - ((B.z - A.z) * (C.x - B.x)));
+  normal.z = (((B.x - A.x) * (C.y - B.y)) - ((B.y - A.y) * (C.x - B.x)));
+  return normal;
 }
 
 /*
