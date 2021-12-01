@@ -143,3 +143,102 @@ getFaceNormal ()
 {
   
 }
+
+/*
+  This function send the received paramters to another function used for
+  draw the lines of each face, also implements the faceHidding function and
+  scanline.
+*/
+void
+mainBresenham ()
+{
+  
+}
+
+/*
+  This function decides how the line is gonna be drawn, according
+  to its calculated slope, some of the draw functions are special
+  cases for Bresenham.
+*/
+void
+drawBresenham ()
+{
+ 
+}
+
+/*
+  This function evaluates the slope of a line.
+*/
+int
+evaluateSlope ()
+{
+ 
+}
+
+/*
+  This function draw the line in the raster, it's the special case when
+  we have a horizontal line.
+*/
+void
+fillSpecialCase1 ()
+{
+  
+}
+
+/*
+  This function draw the line in the raster, it's the special case when
+  we have a vertical line.
+*/
+void
+fillSpecialCase2 ()
+{
+
+}
+
+/*
+  This function draw the line in the raster, it's the special case when
+  we have a positive 45 degrees line.
+*/
+void
+fillSpecialCase3 ()
+{
+ 
+}
+
+/*
+  This function draw the line in the raster, it's the special case when
+  we have a negative 45 degrees line.
+*/
+void
+fillSpecialCase4 ()
+{
+  
+}
+
+/*
+  This function draw the line accoirding to the evaluated slope, uses the
+  main Bresenham algorithm.
+*/
+void
+fillRasterBresenham ()
+{
+  
+}
+
+/*
+  This function put a pixel in the Raster
+*/
+void
+putPixel ()
+{
+  
+}
+
+/*
+  This function create the final image, using the final Raster.
+*/
+void
+generateImage ()
+{
+ 
+}
