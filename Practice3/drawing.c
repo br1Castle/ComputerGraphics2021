@@ -3,6 +3,9 @@
 #include<string.h>
 #include<math.h>
 #include<time.h>
+#include"bresenham.h"
+#include"vertex.h"
+#include"drawing.h"
 
 double diffuseLight[3];
 struct vertex L;
