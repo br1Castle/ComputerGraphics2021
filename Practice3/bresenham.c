@@ -3,6 +3,9 @@
 #include<string.h>
 #include<math.h>
 #include<time.h>
+#include"bresenham.h"
+#include"vertex.h"
+#include"drawing.h"
 
 static const double f = 200;
 double xIni, yIni, xEnd, yEnd;
