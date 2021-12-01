@@ -2,6 +2,8 @@
 #include<math.h>
 #include<stdlib.h>
 #include<time.h>
+#include"bresenham.h"
+#include"vertex.h"
 
 int main ()
 {
