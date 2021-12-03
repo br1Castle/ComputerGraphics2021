@@ -6,11 +6,17 @@
 #include"vertex.h"
 #include"drawing.h"
 
-int j = 0;			
-int m = 0;			
-int fa = 0;			
-int vlc = 0;			
+int j = 0;	/* Main vertex list counter */		
+int m = 0;	/* Edges list counter */
+int fa = 0;	/* Faces list counter */
+int vlc = 0;	/* Auxiliar vertex list counter */			
 
+/*
+  This function performs almost everything in the program (calling
+  other function of the other libraries). Gets the vertex list, 
+  edges list, faces list. Calls the transformation functions in
+  bresenham.h
+*/
 
 void
 VLF (double alfa, double beta, double gamma, double sfX, double sfY,
