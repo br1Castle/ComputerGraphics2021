@@ -7,11 +7,11 @@
 #include"vertex.h"
 #include"drawing.h"
 
-static const double f = 200;
-double xIni, yIni, xEnd, yEnd;
-double slope = 0;
-double aux, auxZB, zbInc;	
-int evaluatedSlope;
+static const double f = 200; /* focal distance for perpective projection */
+double xIni, yIni, xEnd, yEnd;	/* Variables for Bresenham */
+double slope = 0;	/* Slope */
+double aux, auxZB, zbInc;	/* Some auxiliar variables */
+int evaluatedSlope;	/* Evaluated slope value */
 
 /* 
   This function translate the 3D object to a convenient position to perform
